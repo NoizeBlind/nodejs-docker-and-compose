@@ -1,0 +1,22 @@
+FROM node:16-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm i
+
+COPY ./src ./src
+COPY ./public ./public  
+COPY ./nginx ./nginx
+
+RUN npm run build
+#######################
+
+FROM nginx:latest AS prod
+WORKDIR /app
+
+COPY --from=builder /app/nginx/conf.d /etc/nginx/conf.d
+COPY --from=builder /app/build ./
+
+EXPOSE 8081
