@@ -20,4 +20,4 @@ services:
       context: ./../frontend
     image: "kpp-front"
     ports:
-      - "8000:80"
+      - "8081:80"
