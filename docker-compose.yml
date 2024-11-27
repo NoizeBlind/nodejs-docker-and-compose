@@ -1,23 +1,26 @@
 version: "3.8"
 services:
-  postgres-db:
+  database:
     container_name: postgres-db
     image: "postgres:12"
     env_file: .env
     environment:
       PGDATA: ${POSTGRES_PGDATA}
-  kpp-back:
+    restart: on-failure
+  backend:
+    container_name: "kpp-back"
     build: 
       context: ./backend
-    image: "kpp-back"
     ports:
       - "4000:3000"
     env_file: .env
     depends_on:
-      - postgres-db
+      - database
+    restart: on-failure
   frontend:
+    container_name: "kpp-front"
     build:
       context: ./frontend
-    image: "kpp-front"
     ports:
       - "8081:80"
+    restart: on-failure
