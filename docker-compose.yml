@@ -1,23 +1,23 @@
 version: "3.8"
 services:
-  kpp-back:
-    build: 
-      context: . 
-    image: "kpp-back"
-    ports:
-      - "4000:3000"
-    env_file: .env
-    depends_on:
-      - postgres-db
   postgres-db:
     container_name: postgres-db
     image: "postgres:12"
     env_file: .env
     environment:
       PGDATA: ${POSTGRES_PGDATA}
+  kpp-back:
+    build: 
+      context: ./backend
+    image: "kpp-back"
+    ports:
+      - "4000:3000"
+    env_file: .env
+    depends_on:
+      - postgres-db
   frontend:
     build:
-      context: ./../frontend
+      context: ./frontend
     image: "kpp-front"
     ports:
       - "8081:80"
